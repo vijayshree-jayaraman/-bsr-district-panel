@@ -45,7 +45,7 @@ Raw Excel files (`03_raw/`) are not tracked due to size. See the **Data Source**
 ### Requirements
 
 ```r
-install.packages(c("tidyverse", "readxl", "here"))
+install.packages(c("tidyverse", "readxl", "here", "arrow"))
 ```
 
 ### Folder structure
@@ -78,13 +78,15 @@ project-root/
 
 > **Note on pop-bank folder names:** Each folder must follow the format `[PopGroup] [BankGroup]` with a single space separator. The first word becomes `pop_group` and everything after becomes `bank_group` in the output.
 
+> **Parquet / CSV:** Outputs are saved as Parquet by default. To convert back to CSV, uncomment the `write_csv()` lines and comment out the `write_parquet()` lines in `03_convert_to_parquet.R`.
+
 ### Running the scripts
 
 Open either script in RStudio with the `.Rproj` active and run it end to end, or use:
 
 ```r
-source("02_code/BSR_processing.R")         # all-bank panel
-source("02_code/BSR_popbank_processing.R") # pop × bank panel
+source("02_code/01_clean_dist_qtr_total.R")         # agg district- qtr panel
+source("02_code/02_clean_all_cuts.R") # dist x qtr x pop group × bank group panel
 ```
 
 ---
