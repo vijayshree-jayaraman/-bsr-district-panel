@@ -15,9 +15,10 @@ District-level panel data on Scheduled Commercial Bank (SCB) offices, deposits, 
 |---|---|
 | `01_clean_dist_qtr_total.R` | Processes all-bank BSR data into a district-quarter panel |
 | `02_clean_all_cuts.R` | Processes BSR data cut by population group × bank group |
+| `03_convert_to_parquet.R` | Converts both output panels from CSV to Parquet |
 | `BSR_district_over_years.csv` | District name mapping file (BSR names → PC01 boundaries) |
-| `04_clean/district_qtr_total.csv` | Final all-bank panel (output of `01_clean_dist_qtr_total.R`) |
-| `04_clean/district_qtr_pop_bank_panel.csv` | Final pop × bank panel (output of `02_clean_all_cuts.R`) |
+| `04_clean/district_qtr_total.parquet` | Final all-bank panel (output of `01_clean_dist_qtr_total.R`) |
+| `04_clean/district_qtr_pop_bank_panel.parquet` | Final pop × bank panel (output of `02_clean_all_cuts.R`) |
 
 Raw Excel files (`03_raw/`) are not tracked due to size. See the **Data Source** section above to download them from DBIE.
 
@@ -58,18 +59,19 @@ project-root/
 ├── README.md
 │
 ├── 02_code/
-│   ├── BSR_processing.R
-│   └── BSR_popbank_processing.R
+│   ├ 01_clean_dist_qtr_total.R
+│   └- 02_clean_all_cuts.R
+|   └- 03_convert_to_parquet.R
 │
 ├── 03_raw/
 │   ├── All/                      ← Excel files for BSR_processing.R
 │   │   ├── BSR_4A_2003q4-2016q1_pc01.xlsx
 │   │   ├── BSR_4A_2015q2-2016q4_pc11.xlsx
 │   │   ├── BSR_4A_2017q1-2022q3_pc11.xlsx
-│   │   └── BSR_4A_2022q4-2025q2_pc11.xlsx
+│   │   
 │   │
-│   └── [PopGroup] [BankGroup]/   ← one folder per cut, for BSR_popbank_processing.R
-│       └── BSR_4A_*.xlsx           e.g. "Rural Public", "Urban Private"
+│   └── [PopGroup] [BankGroup]/   ← one folder per cut containing three files each, for 02_clean_all_cuts.R
+│       └── BSR_4A_*.xlsx           e.g. "Rural Public", "Urban Private" folder with files names as in the "All" folder
 │
 └── 04_clean/                     ← outputs written here
 ```
@@ -105,8 +107,7 @@ The mapping file covers three naming vintages:
 
 ---
 
-## District Harmonization Caveat
-
+## Important Caveat
 The 13 districts listed below appear in the BSR data but are dropped from the panel due to unclear mapping, possibly because they were carved from multiple parent districts or their PC01 boundary equivalent is ambiguous.
 
 | District | State |
@@ -124,3 +125,4 @@ The 13 districts listed below appear in the BSR data but are dropped from the pa
 | JANGAON | Telangana |
 | SIDDIPET | Telangana |
 | VIKARABAD | Telangana |
+
